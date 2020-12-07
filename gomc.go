@@ -3,6 +3,8 @@ package gomc
 import (
 	"os"
 	"encoding/csv"
+	"io/ioutil"
+	"path/filepath"
 )
 
 func ReadCSV(path string)(map[string]int,[][]string){
@@ -35,4 +37,22 @@ func ReadCSV(path string)(map[string]int,[][]string){
 	}
 
 	return titles,data
+}
+
+func Dirwalk(dir string) []string {
+	files, err := ioutil.ReadDir(dir)
+	if err != nil {
+		panic(err)
+	}
+
+	var paths []string
+	for _, file := range files {
+		if file.IsDir() {
+			paths = append(paths, Dirwalk(filepath.Join(dir, file.Name()))...)
+			continue
+		}
+		paths = append(paths, filepath.Join(dir, file.Name()))
+	}
+
+	return paths
 }
