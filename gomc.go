@@ -41,7 +41,7 @@ func ReadCSV(path string)(map[string]int,[][]string){
 }
 
 func WriteCSV(path string,titles map[string]int,records [][]string){
-	file, err := os.Create("/出力したいパス/sample.csv")
+	file, err := os.Create(path)
 	if err != nil {
 		log.Println(err)
 	}
