@@ -2,6 +2,7 @@ package gomc
 
 import (
 	"os"
+	"log"
 	"encoding/csv"
 	"io/ioutil"
 	"path/filepath"
@@ -37,6 +38,32 @@ func ReadCSV(path string)(map[string]int,[][]string){
 	}
 
 	return titles,data
+}
+
+func WriteCSV(path string,titles map[string]int,records [][]string){
+	file, err := os.Create("/出力したいパス/sample.csv")
+	if err != nil {
+		log.Println(err)
+	}
+	defer file.Close()
+
+	writer := csv.NewWriter(file) // utf8
+
+	header := []string{}
+	for k,v:=range titles{
+		for v >= len(header){
+			header = append(header, "")
+		}
+		header[v] = k
+	}
+
+	writer.Write(header)
+
+	for _,line:=range records{
+		writer.Write(line)
+	}
+
+	writer.Flush()
 }
 
 func Dirwalk(dir string) []string {
