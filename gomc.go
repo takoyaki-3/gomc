@@ -8,6 +8,7 @@ import (
 	"bufio"
 	"io/ioutil"
 	"path/filepath"
+	"net/http"
 )
 
 func newCsvReader(r io.Reader) *csv.Reader {
@@ -96,4 +97,21 @@ func Dirwalk(dir string) []string {
 	}
 
 	return paths
+}
+
+func DownloadURL(url string,path string)error{
+	client := &http.Client{}
+	req, err := http.NewRequest("GET", "http://www3.unobus.co.jp/GTFS/GTFS_RT-VP.bin", nil)
+	resp, err := client.Do(req)
+	defer resp.Body.Close()
+	if err != nil {
+		return err
+	}
+
+	out, err := os.Create(path)
+	defer out.Close()
+	
+	_,err = io.Copy(out, resp.Body)
+
+	return err
 }
