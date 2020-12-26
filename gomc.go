@@ -101,7 +101,7 @@ func Dirwalk(dir string) []string {
 
 func DownloadURL(url string,path string)error{
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", "http://www3.unobus.co.jp/GTFS/GTFS_RT-VP.bin", nil)
+	req, err := http.NewRequest("GET", url, nil)
 	resp, err := client.Do(req)
 	defer resp.Body.Close()
 	if err != nil {
